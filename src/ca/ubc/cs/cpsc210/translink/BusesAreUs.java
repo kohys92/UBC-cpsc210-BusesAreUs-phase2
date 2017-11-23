@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.ubc.cs.cpsc210.translink.model.exception.StopException;
 import ca.ubc.cs.cpsc210.translink.parsers.ArrivalsParser;
 import ca.ubc.cs.cpsc210.translink.parsers.BusParser;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.ArrivalsDataMissingException;
@@ -26,6 +27,7 @@ import ca.ubc.cs.cpsc210.translink.providers.HttpBusLocationDataProvider;
 import ca.ubc.cs.cpsc210.translink.ui.LocationListener;
 import ca.ubc.cs.cpsc210.translink.ui.MapDisplayFragment;
 import ca.ubc.cs.cpsc210.translink.ui.StopSelectionListener;
+import ca.ubc.cs.cpsc210.translink.util.Geometry;
 import ca.ubc.cs.cpsc210.translink.util.LatLon;
 import org.json.JSONException;
 
@@ -38,7 +40,7 @@ public class BusesAreUs extends Activity implements LocationListener, StopSelect
     private MapDisplayFragment fragment;
     private TextView nearestStopLabel;
     private Stop myNearestStop;
-    public static final String TRANSLINK_API_KEY = "This user hasn't registered or update the API key yet";
+    public static final String TRANSLINK_API_KEY = "FVAOLJakkvfZlLYYSlTl";
     public static BusesAreUs activity;
 
     @Override
@@ -103,6 +105,13 @@ public class BusesAreUs extends Activity implements LocationListener, StopSelect
      */
     @Override
     public void onLocationChanged(Stop nearest, LatLon locn) {
+        myNearestStop = nearest;
+        if(myNearestStop ==  null){
+            nearestStopLabel.setText("out of range");
+        }else{
+            nearestStopLabel.setText(nearest.getName());
+        }
+
         // TODO: Complete the implementation of this method (Task 6)
     }
 
@@ -143,6 +152,11 @@ public class BusesAreUs extends Activity implements LocationListener, StopSelect
      */
     @Override
     public void onStopSelected(Stop stop) {
+        try {
+            StopManager.getInstance().setSelected(stop);
+        } catch (StopException e) {
+            System.out.println(e.getMessage());
+        }
         // TODO: Complete the implementation of this method (Task 7)
     }
 

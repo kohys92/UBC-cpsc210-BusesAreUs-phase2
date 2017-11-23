@@ -2,14 +2,22 @@ package ca.ubc.cs.cpsc210.translink.ui;
 
 import android.content.Context;
 import ca.ubc.cs.cpsc210.translink.BusesAreUs;
+import ca.ubc.cs.cpsc210.translink.model.Route;
+import ca.ubc.cs.cpsc210.translink.model.RoutePattern;
+import ca.ubc.cs.cpsc210.translink.model.Stop;
+import ca.ubc.cs.cpsc210.translink.model.StopManager;
+import ca.ubc.cs.cpsc210.translink.util.Geometry;
+import ca.ubc.cs.cpsc210.translink.util.LatLon;
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.bonuspack.overlays.Polyline;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 // A bus route drawer
 public class BusRouteDrawer extends MapViewOverlay {
@@ -33,6 +41,37 @@ public class BusRouteDrawer extends MapViewOverlay {
      * Plot each visible segment of each route pattern of each route going through the selected stop.
      */
     public void plotRoutes(int zoomLevel) {
+        updateVisibleArea();
+        busRouteOverlays.clear();
+        Stop selectedStops = StopManager.getInstance().getSelected();
+        busRouteLegendOverlay.clear();
+
+        if(selectedStops != null) {
+            Set<Route> routes = selectedStops.getRoutes();
+
+            for(Route route : routes) {
+                busRouteLegendOverlay.add(route.getNumber());
+                List<RoutePattern> routePattern = route.getPatterns();
+
+                for(RoutePattern p : routePattern) {
+                    List<LatLon> locn = p.getPath();
+
+                    for(int i = 0; i < locn.size()-1; i++){
+                        Polyline line = new Polyline(mapView.getContext());
+                        line.setColor(busRouteLegendOverlay.getColor(route.getNumber()));
+                        line.setWidth(getLineWidth(zoomLevel));
+                        List<GeoPoint> points = new ArrayList<>();
+
+                        if(Geometry.rectangleIntersectsLine(northWest, southEast, locn.get(i), locn.get(i + 1))) {
+                            points.add(new GeoPoint(locn.get(i).getLatitude(), locn.get(i).getLongitude()));
+                            points.add(new GeoPoint(locn.get(i+ 1).getLatitude(), locn.get(i + 1).getLongitude()));
+                            line.setPoints(points);
+                            busRouteOverlays.add(line);
+                        }
+                    }
+                }
+            }
+        }
         //TODO: complete the implementation of this method (Task 7)
     }
 

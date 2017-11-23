@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import ca.ubc.cs.cpsc210.translink.R;
+import ca.ubc.cs.cpsc210.translink.model.Stop;
 import ca.ubc.cs.cpsc210.translink.model.StopManager;
 import ca.ubc.cs.cpsc210.translink.parsers.RouteMapParser;
 import ca.ubc.cs.cpsc210.translink.parsers.StopParser;
 import ca.ubc.cs.cpsc210.translink.parsers.exception.StopDataMissingException;
+import ca.ubc.cs.cpsc210.translink.util.LatLon;
 import org.json.JSONException;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.MapEventsOverlay;
@@ -268,6 +270,11 @@ public class MapDisplayFragment extends Fragment implements MapEventsReceiver, I
      * @param location   the location of the user
      */
     private void handleLocationChange(Location location) {
+        Stop nearest = StopManager.getInstance().findNearestTo(new LatLon(location.getLatitude(), location.getLongitude()));
+        locationListener.onLocationChanged(nearest,new LatLon(location.getLatitude(), location.getLongitude()));
+        busStopPlotter.updateMarkerOfNearest(nearest);
+
+
         // TODO: complete the implementation of this method (Task 6)
 
     }

@@ -274,9 +274,6 @@ public class MapDisplayFragment extends Fragment implements MapEventsReceiver, I
         locationListener.onLocationChanged(nearest,new LatLon(location.getLatitude(), location.getLongitude()));
         busStopPlotter.updateMarkerOfNearest(nearest);
 
-
-        // TODO: complete the implementation of this method (Task 6)
-
     }
 
     /**

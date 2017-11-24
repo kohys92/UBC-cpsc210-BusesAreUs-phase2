@@ -111,8 +111,6 @@ public class BusesAreUs extends Activity implements LocationListener, StopSelect
         }else{
             nearestStopLabel.setText(nearest.getName());
         }
-
-        // TODO: Complete the implementation of this method (Task 6)
     }
 
     @Override
@@ -154,10 +152,17 @@ public class BusesAreUs extends Activity implements LocationListener, StopSelect
     public void onStopSelected(Stop stop) {
         try {
             StopManager.getInstance().setSelected(stop);
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                new DownloadBusLocationDataTask().execute(stop);
+            } else {
+                Toast.makeText(this, "Unable to establish network connection!", Toast.LENGTH_LONG).show();
+            }
         } catch (StopException e) {
             System.out.println(e.getMessage());
         }
-        // TODO: Complete the implementation of this method (Task 7)
     }
 
     /**

@@ -43,7 +43,6 @@ public class ArrivalsListFragment extends ListFragment {
         }
         return arrivals;
 
-        // TODO: Complete the implementation of this method (Task 9)
     }
 
     /**

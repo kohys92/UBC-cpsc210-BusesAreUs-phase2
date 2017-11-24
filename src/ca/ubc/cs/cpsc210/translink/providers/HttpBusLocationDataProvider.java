@@ -1,5 +1,6 @@
 package ca.ubc.cs.cpsc210.translink.providers;
 
+import ca.ubc.cs.cpsc210.translink.BusesAreUs;
 import ca.ubc.cs.cpsc210.translink.model.Stop;
 
 import java.io.IOException;
@@ -25,8 +26,8 @@ public class HttpBusLocationDataProvider extends AbstractHttpDataProvider {
      * @returns URL to query Translink web service for arrival data
      */
     protected URL getURL() throws MalformedURLException {
-        // TODO: Complete the implementation of this method (Task 10)
-        return null;
+        String url =  "http://api.translink.ca/rttiapi/v1/buses?apikey=" + BusesAreUs.TRANSLINK_API_KEY +  "&stopNo=" + stop.getNumber();
+        return new URL(url);
     }
 
     @Override

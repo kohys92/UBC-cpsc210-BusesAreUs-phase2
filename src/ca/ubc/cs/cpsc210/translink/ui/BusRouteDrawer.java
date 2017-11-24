@@ -72,7 +72,6 @@ public class BusRouteDrawer extends MapViewOverlay {
                 }
             }
         }
-        //TODO: complete the implementation of this method (Task 7)
     }
 
     public List<Polyline> getBusRouteOverlays() {

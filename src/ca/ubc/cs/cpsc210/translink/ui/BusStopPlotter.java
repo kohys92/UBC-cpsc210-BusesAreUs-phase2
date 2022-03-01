@@ -61,7 +61,6 @@ public class BusStopPlotter extends MapViewOverlay {
         Drawable stopIconDrawable = activity.getResources().getDrawable(R.drawable.stop_icon);
         updateVisibleArea();
         newStopClusterer();
-
         StopManager sm = StopManager.getInstance();
         for (Stop currentStop : sm) {
             if (Geometry.rectangleContainsPoint(northWest, southEast, currentStop.getLocn())) {
